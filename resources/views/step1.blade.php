@@ -40,6 +40,10 @@
 
                         <div class="row mt-3">
                             <div class="col-md-6">
+                                <label for="email">Email Id</label>
+                                <input type="email" name="email" id="email" class="form-control" value="{{ old('email', auth()->check() ? auth()->user()->email : '') }}">
+                            </div>
+                            <div class="col-md-6">
                                 <label for="contact">Contact Number</label>
                                 <input type="text" name="contact" id="contact" class="form-control" >
                                 @error('contact')<span class="text-danger error">{{ $message }}</span>@enderror

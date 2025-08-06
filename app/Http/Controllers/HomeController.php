@@ -199,6 +199,7 @@ class HomeController extends Controller
             // 1. Save User or Resume Profile (adjust to your actual model)
             $user = User::create([
                 'name' => $sessionData['data']['fname']." ".$sessionData['data']['lname'],
+                'email' => $sessionData['data']['email'],
                 'contact_no' => $sessionData['data']['contact'],
                 'profession' => $sessionData['data']['Profession'],
                 'city' => $sessionData['data']['city'],
