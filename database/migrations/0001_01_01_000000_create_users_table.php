@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('session_id')->nullable();
             $table->string('name');
+            $table->string('profile_pic')->nullable();
             $table->string('email')->nullable();
             $table->string('contact_no')->nullable();
             $table->string('profession')->nullable();
@@ -26,6 +27,8 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('pincode')->nullable();
             $table->text('objective')->nullable();
+            $table->text('linked_in')->nullable();
+            $table->text('website')->nullable();
             $table->string('skill')->nullable();
             $table->longText('summary')->nullable();
             $table->string('declaration')->nullable();
