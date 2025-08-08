@@ -27,18 +27,25 @@ Route::middleware('auth')->group(function () {
 });
 
 
+// Rredirect User If loged In
+Route::middleware('redirectAuthenticatedUser')->group(function () {
+    Route::get('login', [AuthenticationController::class, 'index'])->name('login');
+});
+
+
 // Authentication
-// Route::get('login', [AuthenticationController::class,'index'])->name('login');
-// Route::post('register',[AuthenticationController::class,'register'])->name('register');
+// Route::get('login', [AuthenticationController::class, 'index'])->name('login');
+Route::post('register', [AuthenticationController::class, 'register'])->name('register');
+Route::post('checkLogin', [AuthenticationController::class, 'checkLogin'])->name('checkLogin');
 
 
-Route::get('step1',[HomeController::class,'home'])->name('step1');
-Route::get('step2',[HomeController::class,'step2'])->name('step2');
-Route::get('step3',[HomeController::class,'step3'])->name('step3');
-Route::post('validateStep1',[HomeController::class,'validateStep1'])->name('validateStep1');
-Route::post('validateStep2',[HomeController::class,'validateStep2'])->name('validateStep2');
-Route::post('validateStep3',[HomeController::class,'validateStep3'])->name('validateStep3');
-Route::get('displayEduction',[HomeController::class,'displayEduction'])->name('displayEduction');
+Route::get('step1', [HomeController::class, 'home'])->name('step1');
+Route::get('step2', [HomeController::class, 'step2'])->name('step2');
+Route::get('step3', [HomeController::class, 'step3'])->name('step3');
+Route::post('validateStep1', [HomeController::class, 'validateStep1'])->name('validateStep1');
+Route::post('validateStep2', [HomeController::class, 'validateStep2'])->name('validateStep2');
+Route::post('validateStep3', [HomeController::class, 'validateStep3'])->name('validateStep3');
+Route::get('displayEduction', [HomeController::class, 'displayEduction'])->name('displayEduction');
 Route::post('deleteEduItem', [HomeController::class, 'deleteEduItem'])->name('deleteEduItem');
 Route::get('displayExperience', [HomeController::class, 'displayExperience'])->name('displayExperience');
 Route::get('saveData', [HomeController::class, 'create'])->name('saveData');
@@ -56,4 +63,4 @@ Route::get('wizard', function () {
     return view('default');
 });
 
-require __DIR__.'/auth.php';
+// require __DIR__.'/auth.php';

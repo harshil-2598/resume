@@ -357,7 +357,7 @@
 </head>
 
 <body>
-    <div id="container" class="container" >
+    <div id="container" class="container">
         <!-- FORM SECTION -->
         <div class="row">
             <!-- SIGN UP -->
@@ -365,34 +365,39 @@
             <div class="col align-items-center flex-col sign-up">
                 <div class="form-wrapper align-items-center">
                     <div class="form sign-up">
-                        <form name="regfrm" id="regfrm" method="POST" enctype="multipart/form-data" action="{{ route('register') }}">
+                        <form name="regfrm" id="regfrm" method="POST" enctype="multipart/form-data"
+                            action="{{ route('register') }}">
                             @csrf
                             <div class="input-group">
                                 <i class='bx bxs-user'></i>
-                                <input type="text" placeholder="Username" name="name" id="name" value="{{ old('name') }}">
+                                <input type="text" placeholder="Username" name="name" id="name"
+                                    value="{{ old('name') }}">
                                 @error('name')
-                                 <span class="text-danger error">{{ $message }}</span>   
+                                    <span class="text-danger error">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="input-group">
                                 <i class='bx bx-mail-send'></i>
-                                <input type="email" placeholder="Email" name="email" id="email" value="{{ old('email') }}">
+                                <input type="email" placeholder="Email" name="email" id="email"
+                                    value="{{ old('email') }}">
                                 @error('email')
-                                 <span class="text-danger error">{{ $message }}</span>   
+                                    <span class="text-danger error">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="input-group">
                                 <i class='bx bxs-lock-alt'></i>
-                                <input type="password" placeholder="Password" name="password" id="password" value="{{ old('password') }}">
+                                <input type="password" placeholder="Password" name="password" id="password"
+                                    value="{{ old('password') }}">
                                 @error('password')
-                                 <span class="text-danger error">{{ $message }}</span>   
+                                    <span class="text-danger error">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="input-group">
                                 <i class='bx bxs-lock-alt'></i>
-                                <input type="password" placeholder="Confirm password" name="CnfPass" id="CnfPass" value="{{ old('CnfPass') }}">
+                                <input type="password" placeholder="Confirm password" name="CnfPass" id="CnfPass"
+                                    value="{{ old('CnfPass') }}">
                                 @error('CnfPass')
-                                 <span class="text-danger error">{{ $message }}</span>   
+                                    <span class="text-danger error">{{ $message }}</span>
                                 @enderror
                             </div>
                             <button>
@@ -418,16 +423,25 @@
             <div class="col align-items-center flex-col sign-in">
                 <div class="form-wrapper align-items-center">
                     <div class="form sign-in">
-                        <form action="" name="loginfrm" id="loginfrm" method="POST"
+                        <form action="{{ route('checkLogin') }}" name="loginfrm" id="loginfrm" method="POST"
                             enctype="multipart/form-data">
+                            @csrf
 
                             <div class="input-group">
                                 <i class='bx bxs-user'></i>
-                                <input type="text" placeholder="Username" name="email" id="email">
+                                <input type="text" placeholder="Username" name="login_email" id="login_email"
+                                    value="{{ old('login_email') }}">
+                                @error('login_email')
+                                    <span class="text-danger error">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="input-group">
                                 <i class='bx bxs-lock-alt'></i>
-                                <input type="password" placeholder="Password" name="password" id="password">
+                                <input type="password" placeholder="Password" name="login_password" id="login_password"
+                                    value="{{ old('login_password') }}">
+                                @error('login_password')
+                                    <span class="text-danger error">{{ $message }}</span>
+                                @enderror
                             </div>
                             <button>
                                 Sign in
@@ -489,29 +503,29 @@
         <!-- END CONTENT SECTION -->
     </div>
     <script>
-    let container = document.getElementById('container')
+        // Get the container div (this wraps your login/register forms)
+        const container = document.getElementById('container');
 
-    // Check for errors in PHP and pass to JS
-    const hasErrors = <?php echo count($errors) > 0 ? 'true' : 'false'; ?>;
+        // Read form_type from session (from Laravel controller)
+        const formType = "{{ session('form_type', 'login') }}";
 
-    toggle = () => {
-        // Only toggle if there are no errors
-        if (!hasErrors) {
-            container.classList.toggle('sign-in')
-            container.classList.toggle('sign-up')
+        // Wait a bit and apply the class to show correct form
+        setTimeout(() => {
+            if (formType === 'register') {
+                container.classList.add('sign-up');
+                container.classList.remove('sign-in');
+            } else {
+                container.classList.add('sign-in');
+                container.classList.remove('sign-up');
+            }
+        }, 200);
+
+        // Optional toggle button — used when user manually switches form
+        function toggle() {
+            container.classList.toggle('sign-in');
+            container.classList.toggle('sign-up');
         }
-    }
-
-    // Initialize based on whether there are errors
-    setTimeout(() => {
-        if (hasErrors) {
-            container.classList.add('sign-up')
-            container.classList.remove('sign-in')
-        } else {
-            container.classList.add('sign-in')
-        }
-    }, 200)
-</script>
+    </script>
 </body>
 
 </html>

@@ -43,8 +43,10 @@ class HomeController extends Controller
             'city' => 'required',
             'country' => 'required',
             'pincode' => 'required',
+            'email' => 'required|email',
         ], [
             'fname.required' => 'Please Enter your first name.',
+            'email.required' => 'Please Enter your Email.',
             'lname.required' => 'Please Enter your last name.',
             'contact.required' => 'Please Enter your contact number.',
             'Profession.required' => 'Please Enter your profession.',
@@ -190,7 +192,7 @@ class HomeController extends Controller
     {
         $session_data = $request->session()->all(); // Correct way to get all session data
         // dd($session_data);
-
+        // session()->forget(['data', 'edu', 'expe']);
         DB::beginTransaction();
 
         try {

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->longText('summary')->nullable();
             $table->string('declaration')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->rememberToken();
             $table->softDeletesTz('deleted_at', precision: 0);
             $table->timestamps();
