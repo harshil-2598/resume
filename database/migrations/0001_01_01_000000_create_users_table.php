@@ -27,8 +27,9 @@ return new class extends Migration
             $table->string('country')->nullable();
             $table->string('pincode')->nullable();
             $table->text('objective')->nullable();
-            $table->text('linked_in')->nullable();
-            $table->text('website')->nullable();
+            $table->longText('professional_summary')->charset('binary')->nullable(); // LONGBLOB
+            $table->string('linked_in')->nullable();
+            $table->string('website')->nullable();
             $table->string('skill')->nullable();
             $table->longText('summary')->nullable();
             $table->string('declaration')->nullable();

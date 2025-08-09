@@ -12,6 +12,8 @@ use App\Models\Experience;
 use App\Models\Eduction;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 class HomeController extends Controller
 {
     /**
@@ -27,15 +29,53 @@ class HomeController extends Controller
         return view('step1');
     }
 
+    // public function validateStep1(Request $request)
+    // {
+    //     // dd($request->all()); 
+    //     // $validator = Validator::make($request->all(), [
+    //     //     'title' => 'required|unique:posts|max:255',
+    //     //     'body' => 'required',
+    //     // ]);
+
+    //     $validatedData = $request->validate([
+    //         'fname' => 'required',
+    //         'lname' => 'required',
+    //         'contact' => 'required',
+    //         'Profession' => 'required',
+    //         'city' => 'required',
+    //         'country' => 'required',
+    //         'pincode' => 'required',
+    //         'email' => 'required|email',
+    //     ], [
+    //         'fname.required' => 'Please Enter your first name.',
+    //         'email.required' => 'Please Enter your Email.',
+    //         'lname.required' => 'Please Enter your last name.',
+    //         'contact.required' => 'Please Enter your contact number.',
+    //         'Profession.required' => 'Please Enter your profession.',
+    //         'city.required' => 'Please Enter your city.',
+    //         'country.required' => 'Please Enter your country.',
+    //         'pincode.required' => 'Please Enter your pincode.',
+    //     ]);
+
+    //     // ✅ Make sure $data is an array
+    //     $data = $request->session()->get('data', []);
+
+    //     // ✅ Append validated data
+    //     $data = $request->all();
+
+    //     // ✅ Put back into session
+    //     $request->session()->put('data', $data);
+
+    //     // ✅ Debug or redirect
+    //     // dd(session('data.fname'));
+    //     // return redirect()->back()->with('success', 'Step 1 completed and data stored in session!');
+    //     return redirect()->route('step2');
+    // }
+
     public function validateStep1(Request $request)
     {
-        // dd($request->all()); 
-        // $validator = Validator::make($request->all(), [
-        //     'title' => 'required|unique:posts|max:255',
-        //     'body' => 'required',
-        // ]);
-
-        $validatedData = $request->validate([
+        // 1️⃣ Validate only required fields
+        $request->validate([
             'fname' => 'required',
             'lname' => 'required',
             'contact' => 'required',
@@ -55,18 +95,22 @@ class HomeController extends Controller
             'pincode.required' => 'Please Enter your pincode.',
         ]);
 
-        // ✅ Make sure $data is an array
+        // 2️⃣ Get all fields from request
+        $allData = $request->all();
+        // dd($allData);
+
+        if ($request->hasFile('profile_image')) {
+            $tempPath = $request->file('profile_image')->store('temp', 'public');
+            $allData['profile_image'] = $tempPath;
+        }
+
+        // 3️⃣ Merge with existing session data (if multi-step form)
         $data = $request->session()->get('data', []);
+        $data = array_merge($data, $allData);
 
-        // ✅ Append validated data
-        $data = $validatedData;
-
-        // ✅ Put back into session
+        // 4️⃣ Store back into session
         $request->session()->put('data', $data);
 
-        // ✅ Debug or redirect
-        // dd(session('data.fname'));
-        // return redirect()->back()->with('success', 'Step 1 completed and data stored in session!');
         return redirect()->route('step2');
     }
     /**
@@ -177,10 +221,10 @@ class HomeController extends Controller
         $expe = session('expe', collect());
         // dd($expe);
         return view('display.sessiondisplayExperience', compact('expe'));
-        
     }
 
-    public function directsaveData(Request $request){
+    public function directsaveData(Request $request)
+    {
         dd(Session::all());
         if ($request->saveBtn = 1) {
             return redirect()->routes('saveData');
@@ -198,15 +242,31 @@ class HomeController extends Controller
         try {
             $sessionData = session()->all();
             // dd($sessionData);
+
+            // 1. Move image from temp to permanent folder
+            if (!empty($sessionData['data']['profile_image'])) {
+                $tempPath = $sessionData['data']['profile_image'];
+                $newPath = str_replace('temp/', 'user/profile_images/', $tempPath);
+
+                // Move file in storage/app/public
+                Storage::disk('public')->move($tempPath, $newPath);
+
+                // Update path in session data
+                $sessionData['data']['profile_image'] = $newPath;
+            }
+
             // 1. Save User or Resume Profile (adjust to your actual model)
             $user = User::create([
-                'name' => $sessionData['data']['fname']." ".$sessionData['data']['lname'],
+                'name' => $sessionData['data']['fname'] . " " . $sessionData['data']['lname'],
                 'email' => $sessionData['data']['email'],
                 'contact_no' => $sessionData['data']['contact'],
                 'profession' => $sessionData['data']['Profession'],
                 'city' => $sessionData['data']['city'],
                 'country' => $sessionData['data']['country'],
                 'pincode' => $sessionData['data']['pincode'],
+                'linked_in' => $sessionData['data']['linked_in'],
+                'website' => $sessionData['data']['website'],
+                'profile_image' => $sessionData['data']['profile_image'] ?? null,
             ]);
 
             // 2. Save Education
@@ -241,7 +301,6 @@ class HomeController extends Controller
             Log::error('Create failed', ['error' => $e->getMessage()]);
             return response()->json(['errors' => 'Failed to save data.', 'exception' => $e->getMessage()], 500);
         }
-
     }
 
 

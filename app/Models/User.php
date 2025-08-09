@@ -30,7 +30,7 @@ class User extends Authenticatable
         'city',
         'country',
         'pincode',
-        'objective',
+        'objective','linked_in','website','profile_image','professional_summary',
         'skill',
         'summary',
         'declaration',
