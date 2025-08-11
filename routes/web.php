@@ -52,6 +52,8 @@ Route::get('saveData', [HomeController::class, 'create'])->name('saveData');
 Route::get('directsaveData', [HomeController::class, 'directsaveData'])->name('directsaveData');
 Route::post('SaveData', [HomeController::class, 'create'])->name('SaveData');
 
+Route::get('chooseTemplate', [HomeController::class, 'chooseTemplate'])->name('chooseTemplate');
+Route::get('showTemplate/{id}', [HomeController::class, 'showTemplate'])->name('showTemplate');
 
 // Route::get('multiStep', function () {
 //     return view('test');

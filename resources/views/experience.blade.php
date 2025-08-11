@@ -191,7 +191,9 @@
                 
                 success: function(data) {
                     // Replace this with proper handling
-                    alert(data.msg || "Data saved successfully.");
+                    if(data.success){
+                          window.location.href = "{{ route('chooseTemplate',) }}";
+                    }
                 },
                 error: function(xhr) {
                     console.error(xhr);

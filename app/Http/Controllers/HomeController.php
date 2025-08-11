@@ -10,9 +10,11 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\Experience;
 use App\Models\Eduction;
+use App\Models\ResumeTemplate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -98,10 +100,17 @@ class HomeController extends Controller
         // 2️⃣ Get all fields from request
         $allData = $request->all();
         // dd($allData);
+        // store image in storage folder
+        // if ($request->hasFile('profile_image')) {
+        //     $tempPath = $request->file('profile_image')->store('temp', 'public');
+        //     $allData['profile_image'] = $tempPath;
+        // }
 
         if ($request->hasFile('profile_image')) {
-            $tempPath = $request->file('profile_image')->store('temp', 'public');
-            $allData['profile_image'] = $tempPath;
+            // Store in public/uploads/temp
+            $filename = $request->file('profile_image')->getClientOriginalName();
+            $path = $request->file('profile_image')->move(public_path('user/temp'), $filename);
+            $allData['profile_image'] = 'user/temp/' . $filename;
         }
 
         // 3️⃣ Merge with existing session data (if multi-step form)
@@ -242,23 +251,47 @@ class HomeController extends Controller
         try {
             $sessionData = session()->all();
             // dd($sessionData);
-
+            $sessionId = Session::getId();
             // 1. Move image from temp to permanent folder
+            // if (!empty($sessionData['data']['profile_image'])) {
+            //     $tempPath = $sessionData['data']['profile_image'];
+            //     $newPath = str_replace('temp/', 'user/profile_images/', $tempPath);
+
+            //     // Move file in storage/app/public
+            //     Storage::disk('public')->move($tempPath, $newPath);
+
+            //     // Update path in session data
+            //     $sessionData['data']['profile_image'] = $newPath;
+            // }
+
             if (!empty($sessionData['data']['profile_image'])) {
                 $tempPath = $sessionData['data']['profile_image'];
-                $newPath = str_replace('temp/', 'user/profile_images/', $tempPath);
+                $filename = basename($tempPath);
+                $newPath = 'user/profile_images/' . $filename;
 
-                // Move file in storage/app/public
-                Storage::disk('public')->move($tempPath, $newPath);
+                // Ensure the target directory exists
+                if (!file_exists(public_path('user/profile_images'))) {
+                    mkdir(public_path('user/profile_images'), 0777, true);
+                }
+
+                // Move file from public/uploads/temp to public/uploads/profile_images
+                rename(public_path($tempPath), public_path($newPath));
 
                 // Update path in session data
                 $sessionData['data']['profile_image'] = $newPath;
+            }
+
+            if(Auth::check()){
+               $sessionId = Auth::user()->id;
+            }else{
+                $sessionId = Str::random(60);
             }
 
             // 1. Save User or Resume Profile (adjust to your actual model)
             $user = User::create([
                 'name' => $sessionData['data']['fname'] . " " . $sessionData['data']['lname'],
                 'email' => $sessionData['data']['email'],
+                'session_id' => $sessionId,
                 'contact_no' => $sessionData['data']['contact'],
                 'profession' => $sessionData['data']['Profession'],
                 'city' => $sessionData['data']['city'],
@@ -266,7 +299,7 @@ class HomeController extends Controller
                 'pincode' => $sessionData['data']['pincode'],
                 'linked_in' => $sessionData['data']['linked_in'],
                 'website' => $sessionData['data']['website'],
-                'profile_image' => $sessionData['data']['profile_image'] ?? null,
+                'profile_pic' => $sessionData['data']['profile_image'] ?? null,
             ]);
 
             // 2. Save Education
@@ -292,17 +325,42 @@ class HomeController extends Controller
                     'end_date' => Carbon::parse($experience['start_date']),
                 ]);
             }
-
+            
             DB::commit();
+            session()->put('last_created_user_id', $user->id);
             session()->forget(['data', 'edu', 'expe']);
-            return response()->json(['success' => 'Data Saved']);
+            return response()->json(['success' => 'Data Saved','user_id'=>$user->id]);
         } catch (\Exception $e) {
             DB::rollBack();
+            session()->forget(['data', 'edu', 'expe']);
             Log::error('Create failed', ['error' => $e->getMessage()]);
             return response()->json(['errors' => 'Failed to save data.', 'exception' => $e->getMessage()], 500);
         }
     }
 
+    public function chooseTemplate()
+    {
+        
+        $getTepmpate = ResumeTemplate::where('is_active', 1)->get();
+        
+        return view('chooseTemplate', compact(['getTepmpate']));
+    }
+
+    public function showTemplate($id)
+    {
+        $user_id = session()->pull('last_created_user_id');
+        $getUser = User::where('id',$user_id)->first();
+        $getEduction = Eduction::where('user_id',$user_id)->get();
+        $getExperience = Experience::where('user_id',$user_id)->get();
+        $template = ResumeTemplate::findOrFail($id);
+        $viewPath = 'templates.' . $template->name;
+
+        if (!view()->exists($viewPath)) {
+            abort(404, 'Template not found');
+        }
+
+        return view($viewPath, compact(['getUser','getExperience','getEduction']));
+    }
 
     /**
      * Store a newly created resource in storage.

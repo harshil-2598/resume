@@ -115,21 +115,30 @@
             }
         });
 
-
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            xhrFields: {
+                withCredentials: true // 🔐 Ensures session cookie is sent
+            }
+        });
 
         function DirectlySaveData() {
             // let formData = $("#multiStepForm").serialize(); // serialize all form data including CSRF token
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route("SaveData") }}',
+                url: '{{ route('SaveData') }}',
                 dataType: 'json',
                 data: {
                     "_token": "{{ csrf_token() }}",
                 },
                 success: function(data) {
                     // Replace this with proper handling
-                    alert(data.success || "Data saved successfully.");
+                    if (data.success) {
+                        window.location.href = "{{ route('chooseTemplate') }}";
+                    }
                 },
                 error: function(xhr) {
                     console.error(xhr);
@@ -138,7 +147,7 @@
                         let errorMessages = Object.values(response.errors).flat().join('<br>');
                         alert("Validation Error:\n" + errorMessages);
                         setTimeout(() => {
-                            window.location.href="{{ route('home') }}";
+                            window.location.href = "{{ route('home') }}";
                         }, 2000);
                     } else {
                         alert("An error occurred while saving.");
