@@ -135,18 +135,29 @@
         <!-- Left Column (Personal Info & Skills) -->
         <div class="left-column">
             <!-- Optional: Add or remove image -->
-            <img src="profile.jpg" alt="Profile Photo" class="profile-img">
-
-            <h1>{{ $getUser->name }}</h1>
-            <p>{{ $getUser->profession }}</p>
+            @if ($getUser)
+                <img src="{{ asset('user/profile_images/'.$getUser->profile_pic) }}" alt="Profile Photo" class="profile-img">
+            @else
+                <img src="profile.jpg" alt="Profile Photo" class="profile-img">
+            @endif
+            <h1>{{ $getUser->name ?? 'Your Name' }}</h1>
+            <p>{{ $getUser->profession ?? 'Your Profession' }}</p>
 
             <div class="contact-info">
                 <h2>Contact</h2>
-                <p><i>📱</i>{{ $getUser->profession }}</p>
-                <p><i>✉️</i> {{ $getUser->profession }}</p>
-                <p><i>🏠</i> {{ $getUser->city }}</p>
-                <p><i>🔗</i> linkedin.com/in/johndoe</p>
-                <p><i>💻</i> github.com/johndoe</p>
+                @if ($getUser)
+                    <p><i>📱</i>{{ $getUser->contact_no ?? 'Phone Number' }}</p>
+                    <p><i>✉️</i> {{ $getUser->email ?? 'Email Address' }}</p>
+                    <p><i>🏠</i> {{ $getUser->city ?? 'City' }}, {{ $getUser->country ?? 'Country' }}</p>
+                    <p><i>🔗</i> {{ $getUser->linked_in ?? 'LinkedIn Profile' }}</p>
+                    <p><i>💻</i> {{ $getUser->website ?? 'Personal Website' }}</p>
+                @else
+                    <p><i>📱</i>Phone Number</p>
+                    <p><i>✉️</i>Email Address</p>
+                    <p><i>🏠</i>City, Country</p>
+                    <p><i>🔗</i>LinkedIn Profile</p>
+                    <p><i>💻</i>Personal Website</p>
+                @endif
             </div>
 
             <div class="skills">
