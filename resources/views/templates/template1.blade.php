@@ -136,7 +136,8 @@
         <div class="left-column">
             <!-- Optional: Add or remove image -->
             @if ($getUser)
-                <img src="{{ asset('user/profile_images/'.$getUser->profile_pic) }}" alt="Profile Photo" class="profile-img">
+                <img src="{{ asset('user/profile_images/' . $getUser->profile_pic) }}" alt="Profile Photo"
+                    class="profile-img">
             @else
                 <img src="profile.jpg" alt="Profile Photo" class="profile-img">
             @endif
@@ -202,9 +203,7 @@
                         <div class="job-title">{{ $exp->job_title }}</div>
                         <div class="company">{{ $exp->employer }}</div>
                         <div class="date">
-                            {{ $exp->start_date ? \Carbon\Carbon::createFromFormat('d-m-Y', $exp->start_date)->format('d-m-Y') : '' }}
-                            -
-                            {{ $exp->end_date ? \Carbon\Carbon::createFromFormat('d-m-Y', $exp->end_date)->format('d-m-Y') : '' }}
+                            {{ $exp->start_date." - ".$exp->end_date }}
                         </div>
                         <div class="description">
                             <ul>
@@ -237,7 +236,7 @@
                         <div class="degree-name">{{ $edu->degree }}</div>
                         <div class="university">{{ $edu->school_name }}</div>
                         <div class="date">
-                            {{ \Carbon\Carbon::createFromFormat('d-m-Y', $edu->passing_year)->format('d-m-Y') }}</div>
+                            {{ \Carbon\Carbon::parse($edu->passing_year)->format('d-m-Y') }}</div>
                     </div>
 
                     {{-- <div class="degree">

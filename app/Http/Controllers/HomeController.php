@@ -348,7 +348,7 @@ class HomeController extends Controller
 
     public function showTemplate($id)
     {
-        $user_id = session()->pull('last_created_user_id');
+        $user_id = session()->get('last_created_user_id');
         $getUser = User::where('id',$user_id)->first();
         $getEduction = Eduction::where('user_id',$user_id)->get();
         $getExperience = Experience::where('user_id',$user_id)->get();
