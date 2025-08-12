@@ -281,9 +281,9 @@ class HomeController extends Controller
                 $sessionData['data']['profile_image'] = $newPath;
             }
 
-            if(Auth::check()){
-               $sessionId = Auth::user()->id;
-            }else{
+            if (Auth::check()) {
+                $sessionId = Auth::user()->id;
+            } else {
                 $sessionId = Str::random(60);
             }
 
@@ -325,11 +325,17 @@ class HomeController extends Controller
                     'end_date' => Carbon::parse($experience['start_date']),
                 ]);
             }
-            
+
             DB::commit();
-            session()->put('last_created_user_id', $user->id);
+
+            if (Auth::user()) {
+                session()->put('user_id', Auth::user()->id);
+            } else {
+                session()->put(['last_created_user_id'=>$user->id,'session_id' => $sessionId]);
+            }
+
             session()->forget(['data', 'edu', 'expe']);
-            return response()->json(['success' => 'Data Saved','user_id'=>$user->id]);
+            return response()->json(['success' => 'Data Saved', 'user_id' => $user->id]);
         } catch (\Exception $e) {
             DB::rollBack();
             session()->forget(['data', 'edu', 'expe']);
@@ -340,18 +346,18 @@ class HomeController extends Controller
 
     public function chooseTemplate()
     {
-        
+
         $getTepmpate = ResumeTemplate::where('is_active', 1)->get();
-        
+
         return view('chooseTemplate', compact(['getTepmpate']));
     }
 
     public function showTemplate($id)
     {
         $user_id = session()->get('last_created_user_id');
-        $getUser = User::where('id',$user_id)->first();
-        $getEduction = Eduction::where('user_id',$user_id)->get();
-        $getExperience = Experience::where('user_id',$user_id)->get();
+        $getUser = User::where('id', $user_id)->first();
+        $getEduction = Eduction::where('user_id', $user_id)->get();
+        $getExperience = Experience::where('user_id', $user_id)->get();
         $template = ResumeTemplate::findOrFail($id);
         $viewPath = 'templates.' . $template->name;
 
@@ -359,7 +365,7 @@ class HomeController extends Controller
             abort(404, 'Template not found');
         }
 
-        return view($viewPath, compact(['getUser','getExperience','getEduction']));
+        return view($viewPath, compact(['getUser', 'getExperience', 'getEduction']));
     }
 
     /**
