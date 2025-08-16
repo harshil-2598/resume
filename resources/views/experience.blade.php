@@ -94,12 +94,12 @@
                     </div>
 
                     <div class="mt-4 text-end">
-                        <button type="submit" class="btn btn-primary">Next</button>
+                        <button type="submit" class="btn btn-primary rounded-pill">Next</button>
                     </div>
-                    <div class="mt-4 text-end">
+                    {{-- <div class="mt-4 text-end">
                         <button type="button" name="saveBtn" onclick="DirectlySaveData()" class="btn btn-primary">Save and
                             Continue</button>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
         </div>

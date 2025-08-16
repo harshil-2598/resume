@@ -70,13 +70,13 @@
                 @endforeach
 
                 <div class="text-end mt-4">
-                    <a href="{{ route('step2') }}" class="btn btn-success">
+                    <a href="{{ route('step2') }}" class="btn btn-warning rounded-start-pill">
                         <i class="fa-solid fa-plus"></i> Add More Education
                     </a>
                 </div>
 
                 <div class="text-end mt-4">
-                    <a href="{{ route('step3') }}" class="btn btn-success">
+                    <a href="{{ route('step3') }}" class="btn btn-dark rounded-start-pill">
                         <i class="fa-solid fa-plus"></i> Next Step
                     </a>
                 </div>

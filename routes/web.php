@@ -42,6 +42,7 @@ Route::post('checkLogin', [AuthenticationController::class, 'checkLogin'])->name
 Route::get('step1', [HomeController::class, 'home'])->name('step1');
 Route::get('step2', [HomeController::class, 'step2'])->name('step2');
 Route::get('step3', [HomeController::class, 'step3'])->name('step3');
+Route::get('step4', [HomeController::class, 'step4'])->name('step4');
 Route::post('validateStep1', [HomeController::class, 'validateStep1'])->name('validateStep1');
 Route::post('validateStep2', [HomeController::class, 'validateStep2'])->name('validateStep2');
 Route::post('validateStep3', [HomeController::class, 'validateStep3'])->name('validateStep3');

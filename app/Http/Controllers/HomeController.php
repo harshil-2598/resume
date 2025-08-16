@@ -240,6 +240,10 @@ class HomeController extends Controller
         }
     }
 
+    public function step4() {
+        return view('');
+    }
+
 
     public function create(Request $request)
     {

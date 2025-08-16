@@ -69,19 +69,19 @@
                 @endforeach
 
                 <div class="text-end mt-4">
-                    <a href="{{ route('step3') }}" class="btn btn-success">
+                    <a href="{{ route('step3') }}" class="btn btn-warning rounded-start-pill">
                         <i class="fa-solid fa-plus"></i> Add More Experience
                     </a>
                 </div>
 
                 <div class="text-end mt-4">
-                    <a href="{{ route('step3') }}" class="btn btn-success">
+                    <a href="{{ route('step4') }}" class="btn btn-dark rounded-start-pill">
                         <i class="fa-solid fa-plus"></i> Next Step
                     </a>
                 </div>
 
                 <div class="mt-4 text-end">
-                    <button type="button" name="saveBtn" onclick="DirectlySaveData()" class="btn btn-primary">Save and
+                    <button type="button" name="saveBtn" onclick="DirectlySaveData()" class="btn btn-success rounded-pill">Save and
                         Continue</button>
                 </div>
 
