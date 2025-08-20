@@ -5,6 +5,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css" rel="stylesheet"
         crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 @endsection
 
 @section('content')
@@ -72,8 +76,7 @@
 
                         <div class="col-md-4">
                             <label for="working_end_date">End Date</label>
-                            <div class="input-group" id="" data-td-target-input="nearest"
-                                data-td-target-toggle="nearest" data-td-target="#">
+                            <div class="input-group" id="" data-td-target-input="nearest" data-td-target-toggle="nearest" data-td-target="#">
                                 <input type="text" name="expe[0][working_end_date]" id="working_end_date"
                                     class="form-control" data-td-target="#working_end_date"
                                     value="{{ old('working_end_date') }}" autocomplete="off">
@@ -91,6 +94,22 @@
                                 <label for="currently_working">Currently Working</label>
                             </div>
                         </div>
+                    </div>
+
+
+                    {{-- <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="job_description">Job Description</label>
+                            <textarea name="job_description" id="job_description" class="form-control" cols="30" rows="10"></textarea>
+                        </div>
+
+                    </div> --}}
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea name="expe[0][job_description]" id="job_description" class="form-control" cols="50" rows="10"></textarea>
+                        </div>
+
                     </div>
 
                     <div class="mt-4 text-end">
@@ -122,12 +141,16 @@
     </div>
 @endsection
 
+
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" crossorigin="anonymous">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
 
     <script>
         // new tempusDominus.TempusDominus(document.getElementById('end_date'), {
@@ -145,6 +168,16 @@
         //         format: 'MM/yyyy'
         //     }
         // });
+
+        // const quill = new Quill('#job_description', {
+        //     theme: 'snow'
+        // });
+
+        ClassicEditor
+            .create(document.querySelector('#job_description'))
+            .catch(error => {
+                console.error(error);
+            });
 
         $(document).ready(function() {
             $("#start_date").datepicker({
@@ -188,11 +221,11 @@
                 type: 'POST',
                 url: '{{ route('SaveData') }}',
                 dataType: 'json',
-                
+
                 success: function(data) {
                     // Replace this with proper handling
-                    if(data.success){
-                          window.location.href = "{{ route('chooseTemplate',) }}";
+                    if (data.success) {
+                        window.location.href = "{{ route('chooseTemplate') }}";
                     }
                 },
                 error: function(xhr) {

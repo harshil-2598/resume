@@ -28,7 +28,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->string('currently_working')->nullable();
-
+            $table->longText('job_description')->charset('binary');
             $table->softDeletes(); // softDeletes is more standard unless you need timezone precision
             $table->timestamps();
         });

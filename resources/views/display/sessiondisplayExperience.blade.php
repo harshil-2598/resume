@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-10">
             <div class="container">
-                <h5 class="card-title p-5">Education History</h5>
+                <h5 class="card-title p-5">Experience History</h5>
 
 
 
@@ -53,7 +53,7 @@
                                     {{ \Carbon\Carbon::parse($ex['start_date'])->format('d-m-y') }}</p>
                             </div>
 
-                            <form action="{{ route('deleteEduItem') }}" method="POST"
+                            <form action="{{ route('deleteExpSession') }}" method="POST"
                                 class="position-absolute top-0 end-0 m-2">
                                 @csrf
                                 <input type="hidden" name="index" value="{{ $index }}">
@@ -76,7 +76,7 @@
 
                 <div class="text-end mt-4">
                     <a href="{{ route('step4') }}" class="btn btn-dark rounded-start-pill">
-                        <i class="fa-solid fa-plus"></i> Next Step
+                        <i class="fa-solid fa-plus"></i> Add Objective
                     </a>
                 </div>
 

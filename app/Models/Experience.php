@@ -14,6 +14,7 @@ class Experience extends Model
         'job_title',
         'employer',
         'job_location',
+        'job_description',
         'start_date',
         'end_date',
         'currently_working',

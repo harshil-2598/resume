@@ -13,6 +13,7 @@ use App\Models\Eduction;
 use App\Models\ResumeTemplate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -193,8 +194,8 @@ class HomeController extends Controller
 
     public function validateStep3(Request $request)
     {
-        // dd($request->all());
-        $validatedData = $request->validate([
+        // Run validation, but it won’t strip other fields
+        $request->validate([
             'expe.*.job_title' => 'required',
             'expe.*.employer' => 'required',
             'expe.*.location' => 'required',
@@ -206,23 +207,20 @@ class HomeController extends Controller
             'expe.*.start_date.required' => 'Please enter your start date.',
         ]);
 
-        // Fetch existing session data
+        // Fetch old session data
         $oldExperienceData = collect(session()->get('expe', []));
 
-        // Get newly submitted data
-        $newExperienceData = collect($validatedData['expe']);
+        // Take ALL submitted `expe` data (including description etc.)
+        $newExperienceData = collect($request->input('expe'));
 
-        // Merge new experience entries with old ones
+        // Merge with old
         $mergedExperienceData = $oldExperienceData->merge($newExperienceData)->values();
 
-        // Store the updated data back to session
         session()->put('expe', $mergedExperienceData->all());
-        if ($request->saveBtn === null) {
-            // return $this->displayExperience();
-            return redirect()->route('displayExperience')->with('success', 'Experience added successfully.');
-        }
+
         return redirect()->route('displayExperience')->with('success', 'Experience added successfully.');
     }
+
 
 
     public function displayExperience()
@@ -240,14 +238,16 @@ class HomeController extends Controller
         }
     }
 
-    public function step4() {
-        return view('');
+    public function step4()
+    {
+        return view('objective');
     }
 
 
     public function create(Request $request)
     {
         $session_data = $request->session()->all(); // Correct way to get all session data
+
         // dd($session_data);
         // session()->forget(['data', 'edu', 'expe']);
         DB::beginTransaction();
@@ -303,7 +303,13 @@ class HomeController extends Controller
                 'pincode' => $sessionData['data']['pincode'],
                 'linked_in' => $sessionData['data']['linked_in'],
                 'website' => $sessionData['data']['website'],
+                'marital_status' => $sessionData['data']['marital_status'],
+                'birth_date' => Carbon::parse($sessionData['data']['birth_date']),
+                'gender' => $sessionData['data']['gender'],
                 'profile_pic' => $sessionData['data']['profile_image'] ?? null,
+                'summary'     => $sessionData['summary'][0] ?? null,
+                'profile_pic' => $sessionData['data']['profile_image'] ?? null,
+                'skill'      => json_encode(array_values(array_unique($sessionData['skills'] ?? []))),
             ]);
 
             // 2. Save Education
@@ -325,8 +331,9 @@ class HomeController extends Controller
                     'job_title' => $experience['job_title'],
                     'employer' => $experience['employer'],
                     'job_location' => $experience['location'],
+                    'job_description' => $experience['job_description'],
                     'start_date' => Carbon::parse($experience['start_date']),
-                    'end_date' => Carbon::parse($experience['start_date']),
+                    'end_date' => Carbon::parse($experience['working_end_date']),
                 ]);
             }
 
@@ -335,14 +342,14 @@ class HomeController extends Controller
             if (Auth::user()) {
                 session()->put('user_id', Auth::user()->id);
             } else {
-                session()->put(['last_created_user_id'=>$user->id,'session_id' => $sessionId]);
+                session()->put(['last_created_user_id' => $user->id, 'session_id' => $sessionId]);
             }
 
-            session()->forget(['data', 'edu', 'expe']);
+            session()->forget(['data', 'edu', 'expe','skills','summary']);
             return response()->json(['success' => 'Data Saved', 'user_id' => $user->id]);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->forget(['data', 'edu', 'expe']);
+            session()->forget(['data', 'edu', 'expe','skills','summary']);
             Log::error('Create failed', ['error' => $e->getMessage()]);
             return response()->json(['errors' => 'Failed to save data.', 'exception' => $e->getMessage()], 500);
         }
@@ -371,6 +378,43 @@ class HomeController extends Controller
 
         return view($viewPath, compact(['getUser', 'getExperience', 'getEduction']));
     }
+
+    public function objective_page()
+    {
+        return view('objective');
+    }
+
+    public function addSummary(Request $request)
+    {
+        // Debugging (can remove once done)
+        // dd($request->all());
+
+        // Get old session values (or empty arrays)
+        $oldSkills = collect(session()->get('skills', []));
+        $oldSummary = collect(session()->get('summary', []));
+
+        // New input values
+        $newSkill = collect($request->input('skills', []));
+        $newSummary = collect([$request->input('summary')]); // wrap in array so merge works
+
+        // Merge with old ones
+        $mergeSummary = $oldSummary->merge($newSummary)->values();
+        $mergeSkill   = $oldSkills->merge($newSkill)->values();
+
+        // Save back into session
+        session()->put('summary', $mergeSummary->all());
+        session()->put('skills', $mergeSkill->all());
+
+        return redirect()->route('displaySkillsAndObjective'); // or wherever next step goes
+    }
+
+    public function displaySkillsAndObjective() {
+        $skills = session('skills', collect());
+        $summary = session('summary', collect());
+        // dd($expe);
+        return view('display.sessiondisplayObjective', compact(['summary','skills']));
+    }
+
 
     /**
      * Store a newly created resource in storage.

@@ -27,6 +27,19 @@
             display: block;
         }
     </style>
+
+    <style>
+        .ck-editor__editable_inline {
+            height: 300px !important;
+            /* fixed height */
+            max-height: 500px !important;
+            /* don’t grow more */
+            overflow-y: auto !important;
+            /* enable vertical scroll */
+            width: 100% !important;
+            /* fill available space */
+        }
+    </style>
     @yield('style')
 </head>
 
@@ -38,6 +51,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 
     @yield('script')
     <script>

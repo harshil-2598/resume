@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RemoveSessionDataController;
 use App\Livewire\MultiStep;
 
 // Route::get('/', function () {
@@ -56,6 +57,12 @@ Route::post('SaveData', [HomeController::class, 'create'])->name('SaveData');
 Route::get('chooseTemplate', [HomeController::class, 'chooseTemplate'])->name('chooseTemplate');
 Route::get('showTemplate/{id}', [HomeController::class, 'showTemplate'])->name('showTemplate');
 
+Route::post('addSummary',[HomeController::class,'addSummary'])->name('addSummary');
+Route::post('deleteExpSession', [RemoveSessionDataController::class, 'deleteExpSession'])->name('deleteExpSession');
+
+Route::get('objective-skills', [HomeController::class,'objective_page'])->name('objective_skills');
+Route::get('displaySkillsAndObjective-skills', [HomeController::class,'displaySkillsAndObjective'])->name('displaySkillsAndObjective');
+Route::post('/delete-skill', [RemoveSessionDataController::class, 'deleteSkill'])->name('deleteSkill');
 // Route::get('multiStep', function () {
 //     return view('test');
 // });
