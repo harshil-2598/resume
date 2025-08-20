@@ -264,7 +264,6 @@ class HomeController extends Controller
             //     // Move file in storage/app/public
             //     Storage::disk('public')->move($tempPath, $newPath);
 
-            //     // Update path in session data
             //     $sessionData['data']['profile_image'] = $newPath;
             // }
 
