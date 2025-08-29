@@ -26,7 +26,7 @@ class User extends Authenticatable
         'nationality',
         'marital_status',
         'gender',
-        'birt_date',
+        'birth_date',
         'city',
         'country',
         'pincode',

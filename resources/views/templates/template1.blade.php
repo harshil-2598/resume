@@ -135,9 +135,9 @@
         <!-- Left Column (Personal Info & Skills) -->
         <div class="left-column">
             <!-- Optional: Add or remove image -->
+            
             @if ($getUser)
-                <img src="{{ asset('user/profile_images/' . $getUser->profile_pic) }}" alt="Profile Photo"
-                    class="profile-img">
+                <img src="{{ asset($getUser->profile_pic) }}" alt="{{ $getUser->name }}" class="profile-img">
             @else
                 <img src="profile.jpg" alt="Profile Photo" class="profile-img">
             @endif

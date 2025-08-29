@@ -366,6 +366,7 @@ class HomeController extends Controller
     {
         $user_id = session()->get('last_created_user_id');
         $getUser = User::where('id', $user_id)->first();
+        // dd($getUser);
         $getEduction = Eduction::where('user_id', $user_id)->get();
         $getExperience = Experience::where('user_id', $user_id)->get();
         $template = ResumeTemplate::findOrFail($id);
@@ -374,8 +375,10 @@ class HomeController extends Controller
         if (!view()->exists($viewPath)) {
             abort(404, 'Template not found');
         }
-
-        return view($viewPath, compact(['getUser', 'getExperience', 'getEduction']));
+        $otherTemplate = ResumeTemplate::where('is_active', 1)->whereNotIn('id', [$id])->get();
+        // dd($template->name);
+        return view("ShowTemplates", compact(['getUser', 'getExperience', 'getEduction','otherTemplate','template']));
+        // return view($viewPath, compact(['getUser', 'getExperience', 'getEduction']));
     }
 
     public function objective_page()
