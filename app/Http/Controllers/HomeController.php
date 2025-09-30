@@ -344,11 +344,11 @@ class HomeController extends Controller
                 session()->put(['last_created_user_id' => $user->id, 'session_id' => $sessionId]);
             }
 
-            session()->forget(['data', 'edu', 'expe','skills','summary']);
+            session()->forget(['data', 'edu', 'expe', 'skills', 'summary']);
             return response()->json(['success' => 'Data Saved', 'user_id' => $user->id]);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->forget(['data', 'edu', 'expe','skills','summary']);
+            session()->forget(['data', 'edu', 'expe', 'skills', 'summary']);
             Log::error('Create failed', ['error' => $e->getMessage()]);
             return response()->json(['errors' => 'Failed to save data.', 'exception' => $e->getMessage()], 500);
         }
@@ -377,7 +377,7 @@ class HomeController extends Controller
         }
         $otherTemplate = ResumeTemplate::where('is_active', 1)->whereNotIn('id', [$id])->get();
         // dd($template->name);
-        return view("ShowTemplates", compact(['getUser', 'getExperience', 'getEduction','otherTemplate','template']));
+        return view("ShowTemplates", compact(['getUser', 'getExperience', 'getEduction', 'otherTemplate', 'template']));
         // return view($viewPath, compact(['getUser', 'getExperience', 'getEduction']));
     }
 
@@ -388,33 +388,40 @@ class HomeController extends Controller
 
     public function addSummary(Request $request)
     {
-        // Debugging (can remove once done)
-        // dd($request->all());
-
         // Get old session values (or empty arrays)
-        $oldSkills = collect(session()->get('skills', []));
+        $oldSkills  = collect(session()->get('skills', []));
         $oldSummary = collect(session()->get('summary', []));
 
         // New input values
-        $newSkill = collect($request->input('skills', []));
-        $newSummary = collect([$request->input('summary')]); // wrap in array so merge works
+        $newSkill   = collect($request->input('skills', []))->filter(); // remove null/empty
+        $summaryVal = $request->input('summary');
 
-        // Merge with old ones
-        $mergeSummary = $oldSummary->merge($newSummary)->values();
-        $mergeSkill   = $oldSkills->merge($newSkill)->values();
+        // Only add summary if it's not null or empty
+        $newSummary = collect([]);
+        if (!empty($summaryVal)) {
+            $newSummary = collect([$summaryVal]);
+        }
 
-        // Save back into session
-        session()->put('summary', $mergeSummary->all());
-        session()->put('skills', $mergeSkill->all());
+        // Merge with old ones only if new data exists
+        if ($newSummary->isNotEmpty()) {
+            $oldSummary = $oldSummary->merge($newSummary)->values();
+            session()->put('summary', $oldSummary->all());
+        }
 
-        return redirect()->route('displaySkillsAndObjective'); // or wherever next step goes
+        if ($newSkill->isNotEmpty()) {
+            $oldSkills = $oldSkills->merge($newSkill)->values();
+            session()->put('skills', $oldSkills->all());
+        }
+
+        return redirect()->route('displaySkillsAndObjective');
     }
 
-    public function displaySkillsAndObjective() {
+    public function displaySkillsAndObjective()
+    {
         $skills = session('skills', collect());
         $summary = session('summary', collect());
         // dd($expe);
-        return view('display.sessiondisplayObjective', compact(['summary','skills']));
+        return view('display.sessiondisplayObjective', compact(['summary', 'skills']));
     }
 
 

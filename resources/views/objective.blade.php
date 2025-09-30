@@ -12,6 +12,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-10">
             <div class="container">
                 <form id="multiStepForm" class="form-group" method="POST" enctype="multipart/form-data"
@@ -29,7 +30,8 @@
                                 <textarea name="summary" id="summary" class="form-control" cols="50" rows="10"></textarea>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-6 m-2 p-2">
+                                <textarea name="summary" id="objective" class="form-control" cols="50" rows="10"></textarea>
                             </div>
                         </div>
 
@@ -42,9 +44,20 @@
 
                         </div>
 
-                        <div class="mt-4 text-end">
-                            <button type="submit" class="btn btn-warning rounded-pill">Next</button>
+                        <div class="row mt-4">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="text-start">
+                                    <a href="{{ url()->previous() }}" class="btn btn-warning rounded-pill">Previous</a>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-success rounded-pill">Next</button>
+                                </div>
+                            </div>
                         </div>
+
+
                     </div>
                 </form>
             </div>
@@ -54,6 +67,10 @@
 @section('script')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        $(document).ready(function() {
+            GetObjectiveFromAi();
+        });
+
         ClassicEditor
             .create(document.querySelector('#summary'))
             .catch(error => {
@@ -68,5 +85,32 @@
                 width: '100%'
             });
         });
+
+        function GetObjectiveFromAi() {
+            // safer way to inject session variable
+            let profession = @json(session('data.Profession', null));
+
+            if (!profession) {
+                alert("No profession provided. Skipping AI call.");
+                return;
+            }
+
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('GetObjectiveFromAi') }}",
+                dataType: 'json',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    profession: profession
+                },
+                success: function(result) {
+                    console.log("Response from AI:", result);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Ajax error:", error);
+                    console.log(xhr.responseText);
+                }
+            });
+        }
     </script>
 @endsection

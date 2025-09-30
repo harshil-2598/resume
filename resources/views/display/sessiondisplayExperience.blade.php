@@ -34,39 +34,44 @@
         <div class="col-md-10">
             <div class="container">
                 <h5 class="card-title p-5">Experience History</h5>
+                
+                @if (!empty($expe))
 
+                    @foreach ($expe as $index => $ex)
+                        <div class="card mt-2 p-3 boreder rounded">
+                            <div class="card-body">
+                                <div class="position-absolute top-0 start-0 bg-light border-end px-3 py-1 rounded-end"
+                                    style="font-weight: bold;">
+                                    {{ $index + 1 }}
+                                </div>
 
+                                <div class="mt-2">
+                                    <p><strong>Job Title:</strong> {{ $ex['job_title'] }}</p>
+                                    <p><strong>Employer:</strong> {{ $ex['employer'] }}</p>
+                                    <p><strong>Location:</strong> {{ $ex['location'] }}</p>
+                                    <p><strong>Passing Year:</strong>
+                                        {{ \Carbon\Carbon::parse($ex['start_date'])->format('d-m-y') }}</p>
+                                </div>
 
-                @foreach ($expe as $index => $ex)
-                    <div class="card mt-2 p-3 boreder rounded">
-                        <div class="card-body">
-                            <div class="position-absolute top-0 start-0 bg-light border-end px-3 py-1 rounded-end"
-                                style="font-weight: bold;">
-                                {{ $index + 1 }}
+                                <form action="{{ route('deleteExpSession') }}" method="POST"
+                                    class="position-absolute top-0 end-0 m-2">
+                                    @csrf
+                                    <input type="hidden" name="index" value="{{ $index }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+
+                                <a href="{{ route('step2') }}" class="position-absolute top-0 m-2 bg-light"><i
+                                        class="fa-solid fa-plus"></i></a>
                             </div>
-
-                            <div class="mt-2">
-                                <p><strong>Job Title:</strong> {{ $ex['job_title'] }}</p>
-                                <p><strong>Employer:</strong> {{ $ex['employer'] }}</p>
-                                <p><strong>Location:</strong> {{ $ex['location'] }}</p>
-                                <p><strong>Passing Year:</strong>
-                                    {{ \Carbon\Carbon::parse($ex['start_date'])->format('d-m-y') }}</p>
-                            </div>
-
-                            <form action="{{ route('deleteExpSession') }}" method="POST"
-                                class="position-absolute top-0 end-0 m-2">
-                                @csrf
-                                <input type="hidden" name="index" value="{{ $index }}">
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
-
-                            <a href="{{ route('step2') }}" class="position-absolute top-0 m-2 bg-light"><i
-                                    class="fa-solid fa-plus"></i></a>
                         </div>
+                    @endforeach
+                @else
+                    <div class="text-center mt-4">
+                        <p>No Experience Added</p>
                     </div>
-                @endforeach
+                @endif
 
                 <div class="text-end mt-4">
                     <a href="{{ route('step3') }}" class="btn btn-warning rounded-start-pill">
@@ -99,9 +104,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" crossorigin="anonymous"></script>
 
     <script>
-        $(document).ready(function() {
-            GetObjectiveFromAi();
-        });
+        
 
         new tempusDominus.TempusDominus(document.getElementById('passing_year_picker'), {
             display: {
@@ -160,28 +163,5 @@
             });
         }
 
-
-
-        function GetObjectiveFromAi() {
-            // safer way to inject session variable
-            let profession = @json(session('data.Profession'));
-
-            $.ajax({
-                method: 'POST',
-                url: "{{ route('GetObjectiveFromAi') }}",
-                dataType: 'json',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    profession: profession
-                },
-                success: function(result) {
-                    console.log("Response from AI:", result);
-                },
-                error: function(xhr, status, error) {
-                    console.error("Ajax error:", error);
-                    console.log(xhr.responseText);
-                }
-            });
-        }
     </script>
 @endsection
