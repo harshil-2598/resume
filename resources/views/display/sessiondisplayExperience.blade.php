@@ -76,14 +76,14 @@
 
                 <div class="text-end mt-4">
                     <a href="{{ route('step4') }}" class="btn btn-dark rounded-start-pill">
-                        <i class="fa-solid fa-plus"></i> Add Objective
+                        <i class="fa-solid fa-plus"></i> Next
                     </a>
                 </div>
 
-                <div class="mt-4 text-end">
+                {{-- <div class="mt-4 text-end">
                     <button type="button" name="saveBtn" onclick="DirectlySaveData()" class="btn btn-success rounded-pill">Save and
                         Continue</button>
-                </div>
+                </div> --}}
 
 
             </div>
@@ -99,6 +99,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js" crossorigin="anonymous"></script>
 
     <script>
+        $(document).ready(function() {
+            GetObjectiveFromAi();
+        });
+
         new tempusDominus.TempusDominus(document.getElementById('passing_year_picker'), {
             display: {
                 components: {
@@ -152,6 +156,30 @@
                     } else {
                         alert("An error occurred while saving.");
                     }
+                }
+            });
+        }
+
+
+
+        function GetObjectiveFromAi() {
+            // safer way to inject session variable
+            let profession = @json(session('data.Profession'));
+
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('GetObjectiveFromAi') }}",
+                dataType: 'json',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    profession: profession
+                },
+                success: function(result) {
+                    console.log("Response from AI:", result);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Ajax error:", error);
+                    console.log(xhr.responseText);
                 }
             });
         }

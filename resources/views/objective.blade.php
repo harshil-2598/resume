@@ -24,17 +24,20 @@
                         </h3>
 
                         <div class="row mt-3">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <label for="description" class="form-label fw-bolder">Professional Summary</label>
                                 <textarea name="summary" id="summary" class="form-control" cols="50" rows="10"></textarea>
                             </div>
 
+                            <div class="col-md-6">
+                            </div>
                         </div>
 
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <label for="skills" class="form-label fw-bolder">Enter Skills:</label>
-                                <select class="form-control" id="skills" name="skills[]" multiple="multiple" aria-placeholder="Example:php devloper "></select>
+                                <select class="form-control" id="skills" name="skills[]" multiple="multiple"
+                                    aria-placeholder="Example:php devloper "></select>
                             </div>
 
                         </div>

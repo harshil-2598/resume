@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OpenAIController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RemoveSessionDataController;
 use App\Livewire\MultiStep;
@@ -66,6 +67,8 @@ Route::post('/delete-skill', [RemoveSessionDataController::class, 'deleteSkill']
 // Route::get('multiStep', function () {
 //     return view('test');
 // });
+
+Route::post('GetObjectiveFromAi', [OpenAIController::class,'generateResumeObjective'])->name('GetObjectiveFromAi');
 
 Route::get('multiStep', MultiStep::class);
 
