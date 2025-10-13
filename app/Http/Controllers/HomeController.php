@@ -29,7 +29,7 @@ class HomeController extends Controller
 
     public function home()
     {
-        return view('step1'); 
+        return view('step1');
     }
 
     // public function validateStep1(Request $request)
