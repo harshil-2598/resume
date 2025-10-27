@@ -9,10 +9,30 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .row {
+            min-height: 100vh;
+            /* Make entire row full viewport height */
+        }
+
         .dark {
             background-color: #07142b;
-            height: 800px;
+            min-height: 100vh;
+            /* Sidebar fills entire screen height */
+            color: #fff;
+            /* Optional: make text readable */
         }
+
+        /* .dark {
+            background-color: #07142b;
+            height: 800px;
+        } */
 
         h1 {
             margin: 50px 0px 25px 0px;
@@ -51,7 +71,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.21.0/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-        <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 
     @yield('script')
     <script>
