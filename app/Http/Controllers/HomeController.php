@@ -366,12 +366,12 @@ class HomeController extends Controller
     {
         $user_id = session()->get('last_created_user_id');
         $getUser = User::where('id', $user_id)->first();
-        // dd($getUser);
+        
         $getEduction = Eduction::where('user_id', $user_id)->get();
         $getExperience = Experience::where('user_id', $user_id)->get();
         $template = ResumeTemplate::findOrFail($id);
         $viewPath = 'templates.' . $template->name;
-
+// dd($viewPath);
         if (!view()->exists($viewPath)) {
             abort(404, 'Template not found');
         }
