@@ -12,7 +12,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row sidebar">
         <div class="col-md-2 dark">
             <div class="container mt-5">
                 <div class="progress-section">
@@ -76,7 +76,8 @@
 
                         <div class="col-md-4">
                             <label for="working_end_date">End Date</label>
-                            <div class="input-group" id="" data-td-target-input="nearest" data-td-target-toggle="nearest" data-td-target="#">
+                            <div class="input-group" id="" data-td-target-input="nearest"
+                                data-td-target-toggle="nearest" data-td-target="#">
                                 <input type="text" name="expe[0][working_end_date]" id="working_end_date"
                                     class="form-control" data-td-target="#working_end_date"
                                     value="{{ old('working_end_date') }}" autocomplete="off">
@@ -124,9 +125,9 @@
         </div>
     </div>
 
-    <div class="spinner-border" role="status">
+    {{-- <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
-    </div>
+    </div> --}}
 
     <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
         <div class="toast-header">

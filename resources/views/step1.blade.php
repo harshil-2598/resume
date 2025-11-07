@@ -11,7 +11,7 @@
 
 @endsection
 @section('content')
-    <div class="row">
+    <div class="row sidebar">
         <div class="col-md-2 dark">
             <div class="container">
                 <div class="progress-section mt-5">

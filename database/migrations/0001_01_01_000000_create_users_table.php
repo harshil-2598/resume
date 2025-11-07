@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('nationality')->nullable();
             $table->string('marital_status')->nullable();
             $table->string('gender')->nullable();
-            $table->date('birt_date')->nullable();
+            $table->date('birth_date')->nullable();
             $table->string('city')->nullable();
             $table->string('country')->nullable();
             $table->string('pincode')->nullable();

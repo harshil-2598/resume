@@ -9,20 +9,6 @@
 
 @section('content')
     <div class="row">
-        
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         <div class="col-md-2 dark">
             <div class="container mt-5">
@@ -32,6 +18,25 @@
             </div>
         </div>
         <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="taxt-center">
+                        @if (session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+
+                        @if (session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
             <div class="container">
                 <h5 class="card-title p-5">Professional Summary</h5>
 
@@ -154,7 +159,7 @@
                         let errorMessages = Object.values(response.errors).flat().join('<br>');
                         alert("Validation Error:\n" + errorMessages);
                         setTimeout(() => {
-                            window.location.href = "{{ route('home') }}";
+                            
                         }, 2000);
                     } else {
                         alert("An error occurred while saving.");

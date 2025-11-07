@@ -16,10 +16,14 @@
             padding: 0;
         }
 
-        .row {
+        .sidebar{
             min-height: 100vh;
-            /* Make entire row full viewport height */
         }
+
+        /* .row {
+            min-height: 100vh; */
+            /* Make entire row full viewport height */
+        /* } */
 
         .dark {
             background-color: #07142b;
