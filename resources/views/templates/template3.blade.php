@@ -13,6 +13,9 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
         }
 
         h1 {
@@ -102,12 +105,19 @@
                 width: 100%;
             }
         }
+
+        .job p,
+        .edu p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
     </style>
 </head>
 
 <body>
     <div class="header">
-        <h1>{{ isset($getUser->name) ? $getUser->name : 'MARSELINA' . '<br>' . 'ZALIYANTI' }}</h1>
+        <h1>{!! isset($getUser->name) ? $getUser->name : 'MARSELINA<br>ZALIYANTI' !!}</h1>
         <div class="position">{{ isset($getUser->name) ? $getUser->profession : 'Accountant' }}</div>
     </div>
 
@@ -147,7 +157,7 @@
 
         @foreach ($getEduction as $edu)
             @php
-                $passing_year = \Carbon\Carbon::parse($exp->passing_year)->format('d-m-Y');
+                $passing_year = \Carbon\Carbon::parse($edu->passing_year)->format('d-m-Y');
             @endphp
 
             <div class="company">{{ $edu->school_name }}</div>
@@ -173,26 +183,14 @@
             $skills = json_decode($getUser->skill);
         @endphp
         <div class="skills-container">
-            @foreach ($skills as $sk)
             <div class="skills-column">
                 <h3>Personal</h3>
                 <ul class="skills-list">
-                    <li>{{ $sk }}</li>
+                    @foreach ($skills as $sk)
+                        <li>{{ $sk }}</li>
+                    @endforeach
                 </ul>
             </div>
-            @endforeach
-            {{-- <div class="skills-column">
-                <h3>Professional</h3>
-                <ul class="skills-list">
-                    <li>Financial Accounting</li>
-                    <li>Management Accounting</li>
-                    <li>Financial Reporting</li>
-                    <li>Auditing</li>
-                    <li>Express Reporting</li>
-                    <li>Accounting Professional</li>
-                    <li>Account Statements</li>
-                </ul>
-            </div> --}}
         </div>
     </div>
 </body>

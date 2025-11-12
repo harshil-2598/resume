@@ -66,7 +66,8 @@
         
         /* Main content area */
         .main-content {
-            margin-left: var(--sidebar-width);
+            /* margin-left: var(--sidebar-width); */
+            margin: 0 auto;
             padding: 2rem;
             min-height: 100vh;
             display: flex;

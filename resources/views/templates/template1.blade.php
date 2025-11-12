@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Resume</title>
     <style>
+        .main-content {
+            margin-left: var(--sidebar-width);
+            /* margin: 0 auto; */
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             line-height: 1.6;
@@ -135,7 +144,7 @@
         <!-- Left Column (Personal Info & Skills) -->
         <div class="left-column">
             <!-- Optional: Add or remove image -->
-            
+
             @if ($getUser)
                 <img src="{{ asset($getUser->profile_pic) }}" alt="{{ $getUser->name }}" class="profile-img">
             @else
@@ -203,7 +212,7 @@
                         <div class="job-title">{{ $exp->job_title }}</div>
                         <div class="company">{{ $exp->employer }}</div>
                         <div class="date">
-                            {{ $exp->start_date." - ".$exp->end_date }}
+                            {{ $exp->start_date . ' - ' . $exp->end_date }}
                         </div>
                         <div class="description">
                             <ul>

@@ -12,6 +12,8 @@
             padding: 20px;
             display: flex;
             justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
 
         .resume {
@@ -20,6 +22,10 @@
             width: 100%;
             padding: 40px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-wrap: break-word;
+            /* ✅ Line wrapping fix */
+            word-wrap: break-word;
+            /* For older browsers */
         }
 
         .header {
@@ -90,6 +96,8 @@
             margin: 5px 0 0;
             font-size: 13px;
             color: #333;
+            word-break: break-word;
+            line-height: 1.5;
         }
 
         .skills {
@@ -121,7 +129,7 @@
                 <p>📞 {{ isset($getUser->contact_no) ? $getUser->contact_no : '+123-456-7890' }}</p>
                 <p>✉️ {{ isset($getUser->email) ? $getUser->email : '+123-456-7890' }}hello@reallygreatsite.com</p>
                 <p>📍 {{ isset($getUser->gender) ? $getUser->gender : 'Male' }}123 Anywhere St., Any City</p>
-                <p>🌐 {{ isset($getUser->website) ? $getUser->website : 'www.reallygreatsite.com' }}</p>
+                <p>🌐 {{ isset($getUser->website) ? $getUser->website : '' }}</p>
             </div>
         </div>
 
