@@ -163,6 +163,9 @@
                                         data-td-target="#birth_date">
                                         <i class="fa-solid fa-calendar"></i>
                                     </span>
+                                    @error('birth_date')
+                                        <span class="text-danger error">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -171,6 +174,9 @@
                                     <option value="unmarried" selected>Unmarried</option>
                                     <option value="married">Married</option>
                                 </select>
+                                @error('marital_status')
+                                    <span class="text-danger error">{{ $message }}</span>
+                                @enderror
                                 {{-- <input type="text" name="marital_status" id="marital_status" class="form-control"
                                 value="{{ old('marital_status') }}"> --}}
                             </div>
@@ -182,6 +188,9 @@
                                 <label for="linked_in" class="form-label">Linked In</label>
                                 <input type="text" name="linked_in" id="linked_in" class="form-control"
                                     value="{{ old('linked_in') }}">
+                                @error('linked_in')
+                                    <span class="text-danger error">{{ $message }}</span>
+                                @enderror
                             </div>
 
 
@@ -189,6 +198,9 @@
                                 <label for="website" class="form-label">website</label>
                                 <input type="text" name="website" id="website" class="form-control"
                                     value="{{ old('website') }}">
+                                @error('website')
+                                    <span class="text-danger error">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 

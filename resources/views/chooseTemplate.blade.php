@@ -71,8 +71,8 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="section_title">
-                                    <h1>Interactive Online Learning</h1>
-                                    <h1>Key Features & Benefits</h1>
+                                    <h1>Choose Template</h1>
+                                    <h1></h1>
                                 </div>
                             </div>
                         </div>
